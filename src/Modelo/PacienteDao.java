@@ -5,6 +5,7 @@
 package Modelo;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,8 +35,8 @@ public class PacienteDao {
             ps.setString(4, pl.getApellidoM());
             ps.setInt(5, pl.getTelefono());
             ps.setString(6, pl.getMotivo());
-            ps.setDate(7, (Date) pl.getFecha());
-            ps.setDate(8, (Date )pl.getHora());
+            ps.setDate(7, new java.sql.Date(pl.getFecha().getTime()));
+            ps.setTimestamp(8, new java.sql.Timestamp(pl.getHora().getTime()));
             ps.execute();
             return true;
         } catch (SQLException e){

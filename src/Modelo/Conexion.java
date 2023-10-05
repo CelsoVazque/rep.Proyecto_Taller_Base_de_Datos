@@ -6,6 +6,7 @@ package Modelo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,9 +19,10 @@ public class Conexion {
         
         try {
             String myBD = "jdbc:mysql://localhost:3306/agenda?serverTimezone=UTC";
-            con = DriverManager.getConnection(myBD, "root", " ");
+            con = DriverManager.getConnection(myBD, "root", "");
+            JOptionPane.showMessageDialog(null, "Conexión exitosa");
             return con;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
         return null;
