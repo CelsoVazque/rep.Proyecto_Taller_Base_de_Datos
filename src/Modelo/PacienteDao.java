@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,7 +35,7 @@ public class PacienteDao {
             ps.setString(2, pl.getNombre());
             ps.setString(3, pl.getApelllidoP());
             ps.setString(4, pl.getApellidoM());
-            ps.setInt(5, pl.getTelefono());
+            ps.setLong(5, pl.getTelefono());
             ps.setString(6, pl.getMotivo());
             ps.setDate(7, new java.sql.Date(pl.getFecha().getTime()));
             ps.setTimestamp(8, new java.sql.Timestamp(pl.getHora().getTime()));
@@ -53,7 +55,7 @@ public class PacienteDao {
     
     public List ListarPaciente(){
         List<Paciente> ListaPl = new ArrayList();
-        String sql = "SELECT FROM pacientes";
+        String sql = "SELECT * FROM pacientes";
         try{
             con = cn.getConnetion();
             ps = con.prepareStatement(sql);
@@ -63,8 +65,8 @@ public class PacienteDao {
                 pl.setDni(rs.getInt("dni"));
                 pl.setNombre(rs.getString("nombre"));
                 pl.setApelllidoP(rs.getString("apellidoP"));
-                pl.setApelllidoP(rs.getString("apellidoM"));
-                pl.setTelefono(rs.getInt("Telefono"));
+                pl.setApellidoM(rs.getString("apellidoM"));
+                pl.setTelefono(rs.getLong("Telefono"));
                 pl.setMotivo(rs.getString("motivo"));
                 pl.setFecha(rs.getDate("fecha"));
                 pl.setHora(rs.getDate("hora"));
@@ -74,6 +76,26 @@ public class PacienteDao {
             System.out.println(e.toString());
         }
         return ListaPl;
+    }
+    
+    
+    public boolean EliminarPaciente (int dni){
+        String sql = "DELETE FROM pacientes WHERE dni = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, dni);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        }finally{
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+        }
     }
     
 }
