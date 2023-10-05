@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Paciente {
     private int id;
-    private int dni;
+    private int dni; 
     private String nombre;
     private String ApelllidoP;
     private String ApellidoM;
