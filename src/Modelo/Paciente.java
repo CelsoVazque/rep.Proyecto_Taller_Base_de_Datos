@@ -7,6 +7,7 @@ package Modelo;
 import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.sql.Time;
 
 /**
  *
@@ -18,15 +19,15 @@ public class Paciente {
     private String nombre;
     private String ApelllidoP;
     private String ApellidoM;
-    private int telefono; 
+    private long telefono; 
     private String motivo;
     private Date fecha;
-    private Date hora;
+    private Time hora;
 
     public Paciente() {
     }
 
-    public Paciente(int id, int dni, String nombre, String ApelllidoP, String ApellidoM, int telefono, String motivo, Date fecha, Date hora) {
+    public Paciente(int id, int dni, String nombre, String ApelllidoP, String ApellidoM, long telefono, String motivo, Date fecha, Time hora) {
         this.id = id;
         this.dni = dni;
         this.nombre = nombre;
@@ -78,11 +79,11 @@ public class Paciente {
         this.ApellidoM = ApellidoM;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
@@ -102,11 +103,11 @@ public class Paciente {
         this.fecha = fecha;
     }
 
-    public Date getHora() {
+    public Time getHora() {
         return hora;
     }
 
-    public void setHora(Date hora) {
+    public void setHora(Time hora) {
         this.hora = hora;
     }
     
