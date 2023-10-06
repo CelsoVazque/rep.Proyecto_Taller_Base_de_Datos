@@ -38,7 +38,7 @@ public class PacienteDao {
             ps.setLong(5, pl.getTelefono());
             ps.setString(6, pl.getMotivo());
             ps.setDate(7, new java.sql.Date(pl.getFecha().getTime()));
-            ps.setTimestamp(8, new java.sql.Timestamp(pl.getHora().getTime()));
+            ps.setTime(8, pl.getHora());
             ps.execute();
             return true;
         } catch (SQLException e){
@@ -69,7 +69,7 @@ public class PacienteDao {
                 pl.setTelefono(rs.getLong("Telefono"));
                 pl.setMotivo(rs.getString("motivo"));
                 pl.setFecha(rs.getDate("fecha"));
-                pl.setHora(rs.getDate("hora"));
+                pl.setHora(rs.getTime("hora"));
                 ListaPl.add(pl);
             } 
         }catch (SQLException e){
@@ -98,4 +98,34 @@ public class PacienteDao {
         }
     }
     
+    
+    public boolean ModificarPaciente(Paciente pl){
+        String sql = "UPDATE pacientes Set nombre=?, apellidoP =?, apellidoM=?, Telefono=?, motivo=?, fecha=?, hora=? WHERE dni = ? ";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, pl.getNombre());
+            ps.setString(2, pl.getApelllidoP());
+            ps.setString(3, pl.getApellidoM());
+            ps.setLong(4, pl.getTelefono());
+            ps.setString(5, pl.getMotivo());
+            // Convierte el java.util.Date a java.sql.Date
+            java.sql.Date fechaSql = new java.sql.Date(pl.getFecha().getTime());
+            ps.setDate(6, fechaSql);
+            java.sql.Date horasql = new java.sql.Date(pl.getHora().getTime());
+            ps.setDate(7, horasql); 
+            ps.setInt(8, pl.getDni());
+            ps.execute();
+            return true;
+                    
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        }finally{
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
 }
