@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.text.ParseException;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextField;
@@ -78,19 +79,6 @@ public class Sistema extends javax.swing.JFrame {
         }
     }
 
-    public void InsertarHora() {
-        try {
-            String sql = "INSERT Into pacientes (hora) values (?)";
-            PreparedStatement pst = con.prepareStatement(sql);
-            //Convertimos la informacion a la BDD
-            pst.setString(8, ((JTextField) jdHoraPaciente.getDateEditor().getUiComponent()).getText());
-            pst.execute();
-            JOptionPane.showMessageDialog(null, "Registro exitoso");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error de registro" + e.getMessage());
-        }
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,7 +129,6 @@ public class Sistema extends javax.swing.JFrame {
         jdHoraPaciente = new com.toedter.calendar.JDateChooser();
         btnEliminar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
-        txtHora = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePacientes = new javax.swing.JTable();
@@ -374,8 +361,6 @@ public class Sistema extends javax.swing.JFrame {
             }
         });
 
-        txtHora.setText("jTextField1");
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -427,10 +412,6 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(180, 180, 180))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,9 +446,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jdFechaPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21)))
+                                .addGap(55, 55, 55)))
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
@@ -587,15 +566,22 @@ public class Sistema extends javax.swing.JFrame {
             pl.setTelefono(Long.parseLong(txtTelefonoPaciente.getText()));
             pl.setMotivo(txtMotivoPaciente.getText());
             pl.setFecha(jdFechaPaciente.getDate());
-            // Supongamos que tienes un JDateChooser llamado jdHoraPaciente
-            java.util.Date fechaHoraSeleccionada = jdHoraPaciente.getDate();
+            // Supongamos que estás trabajando en la zona horaria "America/Mexico_City"
+            TimeZone timeZone = TimeZone.getTimeZone("SYSTEM");
 
-// Convierte la fecha seleccionada a un objeto java.sql.Time
-            java.sql.Time hora = new java.sql.Time(fechaHoraSeleccionada.getTime());
+            // Obtén la hora seleccionada del JDateChooser
+            java.util.Date horaSeleccionada = jdHoraPaciente.getDate();
 
-// Establece la hora en el objeto Paciente
-            pl.setHora(hora);
-            
+            // Establece la zona horaria local en la fecha seleccionada
+            Calendar calendar = Calendar.getInstance(timeZone);
+            calendar.setTime(horaSeleccionada);
+
+            // Convierte la hora a UTC
+            java.sql.Time horaUTC = new java.sql.Time(calendar.getTimeInMillis());
+
+            // Establece la hora en el objeto Paciente
+            pl.setHora(horaUTC);
+            System.out.println(horaUTC);
             // Obtener la fecha seleccionada
             java.util.Date fechaSeleccionada = jdFechaPaciente.getDate();
 
@@ -603,7 +589,7 @@ public class Sistema extends javax.swing.JFrame {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String fechaFormateada = dateFormat.format(fechaSeleccionada);
 
-            // mesajes a mostrar<
+            // mesajes a mostrar
             JOptionPane.showMessageDialog(this, "Fecha seleccionada: " + fechaFormateada);
 
             //Registramos Paciente
@@ -624,6 +610,7 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
+        CantidadDePaneles.setSelectedIndex(1);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void tablePacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePacientesMouseClicked
@@ -634,25 +621,21 @@ public class Sistema extends javax.swing.JFrame {
         txtApellidopPaciente.setText(tablePacientes.getValueAt(fila, 2).toString());
         txtApellidomPaciente.setText(tablePacientes.getValueAt(fila, 3).toString());
         txtTelefonoPaciente.setText(tablePacientes.getValueAt(fila, 4).toString());
-        txtMotivoPaciente.setText(tablePacientes.getValueAt(fila, 4).toString());
+        txtMotivoPaciente.setText(tablePacientes.getValueAt(fila, 5).toString());
         // la columna 6 contiene la fecha como un objeto Date
         Date fecha = (Date) tablePacientes.getValueAt(fila, 6);
         jdFechaPaciente.setDate(fecha);
+        TimeZone timeZone = TimeZone.getTimeZone("America/Mexico_City");
+        java.util.Date horaSeleccionada = jdHoraPaciente.getDate();
+        java.sql.Time horaUTC = new java.sql.Time(horaSeleccionada.getTime() - timeZone.getRawOffset());
+        pl.setHora(horaUTC);
 
-     java.util.Date fechaHoraSeleccionada = jdHoraPaciente.getDate();
+        // Obtener la fecha seleccionada
+        java.util.Date fechaSeleccionada = jdFechaPaciente.getDate();
 
-// Convierte la fecha seleccionada a un objeto java.sql.Time
-            java.sql.Time hora = new java.sql.Time(fechaHoraSeleccionada.getTime());
-
-// Establece la hora en el objeto Paciente
-            pl.setHora(hora);
-            
-            // Obtener la fecha seleccionada
-            java.util.Date fechaSeleccionada = jdFechaPaciente.getDate();
-
-            // Convertir la fecha a un formato deseado, por ejemplo, yyyy-MM-dd
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String fechaFormateada = dateFormat.format(fechaSeleccionada);
+        // Convertir la fecha a un formato deseado, por ejemplo, yyyy-MM-dd
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaFormateada = dateFormat.format(fechaSeleccionada);
         CantidadDePaneles.setSelectedIndex(1);
     }//GEN-LAST:event_tablePacientesMouseClicked
 
@@ -685,7 +668,10 @@ public class Sistema extends javax.swing.JFrame {
                 pl.setTelefono(Long.parseLong(txtTelefonoPaciente.getText()));
                 pl.setMotivo(txtMotivoPaciente.getText());
                 pl.setFecha(jdFechaPaciente.getDate());
-                pl.setHora((Time) jdHoraPaciente.getDate());
+                //pl.setHora((Time) jdHoraPaciente.getDate());
+                java.util.Date fechaUtil = jdHoraPaciente.getDate();
+                java.sql.Time horaSql = new java.sql.Time(fechaUtil.getTime());
+                pl.setHora(horaSql);
                 pl.setDni(Integer.parseInt(txtDniPaciente.getText()));
 
                 pacient.ModificarPaciente(pl);
@@ -777,7 +763,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtApellidomPaciente;
     private javax.swing.JTextField txtApellidopPaciente;
     private javax.swing.JTextField txtDniPaciente;
-    private javax.swing.JTextField txtHora;
     private javax.swing.JTextField txtMotivoPaciente;
     private javax.swing.JTextField txtNombrePaciente;
     private javax.swing.JTextField txtTelefonoPaciente;
