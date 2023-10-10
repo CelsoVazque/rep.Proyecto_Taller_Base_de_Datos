@@ -38,6 +38,7 @@ public class PacienteDao {
             ps.setLong(5, pl.getTelefono());
             ps.setString(6, pl.getMotivo());
             ps.setDate(7, new java.sql.Date(pl.getFecha().getTime()));
+            
             ps.setTime(8, pl.getHora());
             ps.execute();
             return true;
@@ -112,7 +113,8 @@ public class PacienteDao {
             java.sql.Date fechaSql = new java.sql.Date(pl.getFecha().getTime());
             ps.setDate(6, fechaSql);
             java.sql.Date horasql = new java.sql.Date(pl.getHora().getTime());
-            ps.setDate(7, horasql); 
+            ps.setTime(7, pl.getHora());
+            //ps.setDate(7, horasql); 
             ps.setInt(8, pl.getDni());
             ps.execute();
             return true;
