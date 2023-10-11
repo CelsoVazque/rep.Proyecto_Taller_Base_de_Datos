@@ -210,10 +210,10 @@ public class Sistema extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
+            .addGap(0, 190, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 150, 160));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 0, 150, 190));
 
         jLabel10.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
         jLabel10.setText("Nombre:");
@@ -335,6 +335,36 @@ public class Sistema extends javax.swing.JFrame {
         jLabel8.setText("Fecha");
 
         jLabel9.setText("Hora");
+
+        txtDniPaciente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniPacienteKeyTyped(evt);
+            }
+        });
+
+        txtNombrePaciente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombrePacienteKeyTyped(evt);
+            }
+        });
+
+        txtApellidopPaciente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidopPacienteKeyTyped(evt);
+            }
+        });
+
+        txtApellidomPaciente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidomPacienteKeyTyped(evt);
+            }
+        });
+
+        txtTelefonoPaciente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoPacienteKeyTyped(evt);
+            }
+        });
 
         jdFechaPaciente.setDateFormatString("yyyy-MM-dd");
 
@@ -684,6 +714,77 @@ public class Sistema extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void txtDniPacienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniPacienteKeyTyped
+        // TODO add your handling code here:
+        //Codigo para que solo ingrese numeros
+        char validar = evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtDniPacienteKeyTyped
+
+    private void txtNombrePacienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombrePacienteKeyTyped
+        // TODO add your handling code here:
+        //Codigo para que solo ingrese letras
+        char validar = evt.getKeyChar();
+        
+        if(Character.isDigit(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo letras");
+        }
+    }//GEN-LAST:event_txtNombrePacienteKeyTyped
+
+    private void txtApellidopPacienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidopPacienteKeyTyped
+        // TODO add your handling code here:
+        //Codigo para que solo ingrese letras
+        char validar = evt.getKeyChar();
+        
+        if(Character.isDigit(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo letras");
+        }
+    }//GEN-LAST:event_txtApellidopPacienteKeyTyped
+
+    private void txtApellidomPacienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidomPacienteKeyTyped
+        // TODO add your handling code here:
+        //Codigo para que solo ingrese letras
+        char validar = evt.getKeyChar();
+        
+        if(Character.isDigit(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo letras");
+        }
+    }//GEN-LAST:event_txtApellidomPacienteKeyTyped
+
+    private void txtTelefonoPacienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoPacienteKeyTyped
+        // TODO add your handling code here:
+        
+        //Limitar el numero de caracteres a 10
+        if(txtTelefonoPaciente.getText().length() >= 10){
+            evt.consume();
+        }
+        
+        //Codigo para que solo ingrese numeros
+        char validar = evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtTelefonoPacienteKeyTyped
 
     /**
      * @param args the command line arguments
